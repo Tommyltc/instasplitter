@@ -61,9 +61,9 @@ function initCanvas(id){
     canvas.addEventListener("mousemove",mousemove);
     canvas.addEventListener("mousedown",mousedown);
     canvas.addEventListener("mouseup",mouseup);
-    canvas.addEventListener("touchmove",mousemove);
-    canvas.addEventListener("touchstart",mousedown);
-    canvas.addEventListener("touchend",mouseup);
+    canvas.addEventListener("touchmove",touchmove);
+    canvas.addEventListener("touchstart",touchdown);
+    canvas.addEventListener("touchend",touchup);
 }
 
 function drawCanvas(canvas,context,imageData,maxWidth,drawLine){
@@ -140,6 +140,22 @@ function generateImages(imageData,maxWidth){
         // link.appendChild(linkText);
         // document.getElementById("links").appendChild(link);
     }
+}
+
+function touchmove(e){
+    if(lastDimen!=null){
+        // alert("move");
+    }
+}
+
+function touchdown(e){
+    if(global.imageData)
+        alert("down");
+        // lastDimen = {x:e.clientX,y:e.clientY};
+}
+
+function touchup(e){
+    alert("up");
 }
 
 function mousemove(e){
