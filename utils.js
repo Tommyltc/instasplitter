@@ -96,6 +96,7 @@ function drawCanvas(canvas,context,imageData,maxWidth,drawLine){
 }
 
 function generateImages(imageData,maxWidth){
+    var ig_max_width = 1080;
     var scaleRatio = maxWidth/imageData.width;
     var ocanvas = document.createElement("canvas");
     ocanvas.width = imageData.width;
@@ -122,23 +123,16 @@ function generateImages(imageData,maxWidth){
         //     link.click();
         //     link.remove();
         // }else{
-            // var link = document.createElement("a");
-            // if(document.getElementById("file_prefix").value!="")
-            //     link.download = document.getElementById("file_prefix").value+"_"+i+"_"+ new Date().getTime()+ ".png";
-            // else
-            //     link.download = "image_"+i+"_"+ new Date().getTime()+ ".png";
-            // link.href = pcanvas.toDataURL();
-
             var img = document.createElement("img");
             img.width = imageData.height*scaleRatio;
             img.src = pcanvas.toDataURL();
             // link.appendChild(img);
             document.getElementById("links").appendChild(img);
+        break;
         // }
-        // var linkText = document.createTextNode(link.download);
-        // link.appendChild(linkText);
-        // document.getElementById("links").appendChild(link);
     }
+    ocanvas.remove();
+    pcanvas.remove();
     var div = document.createElement("div");
     div.className = "hits-block";
     var linkText = document.createTextNode("Long press to download images");
