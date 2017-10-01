@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Photo Spliter</title>
+    <script src="utils.js"></script>
+</head>
+<body>
+<div>
+    <div>
+        <input type="file" id="file-input" accept="image/*"/>
+    </div>
+    <div>
+        <input type="checkbox" id="drawline" name="drawline"/><label for="drawline">Draw Line</label>
+    </div>
+    <div>
+        <label for="file_prefix">file prefix</label> <input type="text" id="file_prefix"/>
+    </div>
+</div>
+<div>
+    <canvas id="canvas" width="500" height="500"></canvas>
+</div>
+<div id="links">
+
+</div>
+<style>
+    div {
+        display: block;
+    }
+    a {
+        display: block;
+    }
+</style>
+<script>
+    //instagram max 1080 min 566
+    document.addEventListener("DOMContentLoaded",function(){
+        bindFileReaderListener("file-input",function(result){
+            joinGlobal({imageResult:result});
+            //TODO do something image processing in here
+            var imageObj = getImageFromDataURL(result,function(){
+                var diff = imageObj.width%imageObj.height;
+                var resizeWidth = imageObj.width;
+                var resizeHeight = imageObj.height;
+
+                if(document.getElementById("drawline").checked) {
+                    var scaleRatio = 1000/resizeWidth;
+                    var scaleWidth = 1000;
+                    var scaleHeight = resizeHeight*scaleRatio;
+
+                    var scaleDiff = diff*scaleRatio;
+                    global.canvas.element.width = scaleWidth;
+                    global.canvas.element.height = scaleHeight;
+                    global.canvas.context.drawImage(imageObj,0,0,scaleWidth,scaleHeight);
+                    for (var i = 0; i < (imageObj.width - diff) / imageObj.height; i++) {
+                        global.canvas.context.beginPath();
+                        global.canvas.context.moveTo((imageObj.height * i) * scaleRatio, 0);
+                        global.canvas.context.lineTo((imageObj.height * i) * scaleRatio, scaleHeight);
+                        global.canvas.context.stroke();
+                    }
+
+                    global.canvas.context.beginPath();
+                    global.canvas.context.moveTo(scaleWidth - scaleDiff, 0);
+                    global.canvas.context.lineTo(scaleWidth - scaleDiff, scaleHeight);
+                    global.canvas.context.stroke();
+                }else{
+                    global.canvas.element.width = resizeWidth-diff;
+                    global.canvas.element.height = resizeHeight;
+                    global.canvas.context.drawImage(imageObj,0,0,resizeWidth-diff,resizeHeight);
+
+                    var pcanvas = document.createElement("canvas");
+                    pcanvas.width = resizeHeight;
+                    pcanvas.height = resizeHeight;
+                    var pcontext = pcanvas.getContext('2d');
+                    document.getElementById("links").innerHTML = "";
+                    for(var i=0;i<(resizeWidth-diff)/resizeHeight;i++){
+                        var data = global.canvas.context.getImageData(resizeHeight*i,0,resizeHeight,resizeHeight);
+                        pcontext.putImageData(data,0,0);
+                        var link = document.createElement("a");
+                        if(document.getElementById("file_prefix").value!="")
+                            link.download = document.getElementById("file_prefix").value+"_"+i+"_"+ new Date().getTime()+ ".png";
+                        else
+                            link.download = "image_"+i+"_"+ new Date().getTime()+ ".png";
+                        link.target = "_blank";
+                        link.href = pcanvas.toDataURL();
+
+                        var linkText = document.createTextNode(link.download);
+                        link.appendChild(linkText);
+                        document.getElementById("links").appendChild(link);
+                    }
+                }
+            });
+        });
+        initCanvas("canvas");
+    });
+</script>
+</body>
+</html>
