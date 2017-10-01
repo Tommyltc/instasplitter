@@ -128,7 +128,6 @@ function generateImages(imageData,maxWidth){
             img.src = pcanvas.toDataURL();
             // link.appendChild(img);
             document.getElementById("links").appendChild(img);
-        break;
         // }
     }
     ocanvas.remove();
