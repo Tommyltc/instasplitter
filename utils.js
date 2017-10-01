@@ -58,9 +58,12 @@ function initCanvas(id){
                 }
             }
         });
-    canvas.addEventListener("mousemove touchmove",mousemove);
-    canvas.addEventListener("mousedown touchstart",mousedown);
-    canvas.addEventListener("mouseup touchend",mouseup);
+    canvas.addEventListener("mousemove",mousemove);
+    canvas.addEventListener("mousedown",mousedown);
+    canvas.addEventListener("mouseup",mouseup);
+    canvas.addEventListener("touchmove",mousemove);
+    canvas.addEventListener("touchstart",mousedown);
+    canvas.addEventListener("touchend",mouseup);
 }
 
 function drawCanvas(canvas,context,imageData,maxWidth,drawLine){
@@ -152,7 +155,7 @@ function mousemove(e){
             global.canvas.element,
             global.canvas.context,
             global.imageData,
-            detectmob()?500:1000,
+            detectmob()?200:1000,
             true
         );
     }
