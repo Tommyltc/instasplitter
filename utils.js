@@ -1,7 +1,7 @@
 /**
  * Created by lindaltc on 27/9/2017.
  */
-alert("1.0.4");
+alert("1.0.5");
 var global = {};
 var lastDimen = null;
 var xOffset = 0,yOffset = 0;
@@ -157,7 +157,11 @@ function touchdown(e){
 }
 
 function touchup(e){
-    var touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
+    var touch;
+    if (e.targetTouches.length >= 1)
+        touch = e.targetTouches.item(0);
+    else
+        touch = e.touches.item(0);
     var linkText = document.createTextNode(JSON.stringify({x:touch.clientX,y:touch.clientY}));
     document.getElementById("links").appendChild(linkText);
 }
