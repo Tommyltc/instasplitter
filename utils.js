@@ -1,7 +1,7 @@
 /**
  * Created by lindaltc on 27/9/2017.
  */
-alert("1.0.5");
+alert("1.0.6");
 var global = {};
 var lastDimen = null;
 var xOffset = 0,yOffset = 0;
@@ -145,25 +145,36 @@ function generateImages(imageData,maxWidth){
 
 function touchmove(e){
     if(lastDimen!=null){
-        // alert("move");
+        var touch;
+        if (e.changedTouches.length >= 1)
+            touch = e.changedTouches.item(0);
+        var dX = touch.clientX-lastDimen.x;
+        var dY = touch.clientY-lastDimen.y;
+        xOffset += dX;
+        yOffset += dY;
+        xOffset = xOffset>0?xOffset<global.imageData.diff?xOffset:global.imageData.diff:0;
+        lastDimen = {x:touch.clientX,y:touch.clientY};
+        drawCanvas(
+            global.canvas.element,
+            global.canvas.context,
+            global.imageData,
+            1000,
+            true
+        );
     }
 }
 
 function touchdown(e){
     if(global.imageData){
-        document.getElementById("links").innerHTML = "";
+        var touch;
+        if (e.changedTouches.length >= 1)
+            touch = e.changedTouches.item(0);
+        lastDimen = {x:touch.clientX,y:touch.clientY};
     }
-        // lastDimen = {x:e.clientX,y:e.clientY};
 }
 
 function touchup(e){
-    var touch;
-    if (e.targetTouches.length >= 1)
-        touch = e.targetTouches.item(0);
-    else
-        touch = e.touches.item(0);
-    var linkText = document.createTextNode(JSON.stringify({x:touch.clientX,y:touch.clientY}));
-    document.getElementById("links").appendChild(linkText);
+    lastDimen = null;
 }
 
 function mousemove(e){
@@ -173,7 +184,6 @@ function mousemove(e){
         xOffset += dX;
         yOffset += dY;
         xOffset = xOffset>0?xOffset<global.imageData.diff?xOffset:global.imageData.diff:0;
-
         lastDimen = {x:e.clientX,y:e.clientY};
         drawCanvas(
             global.canvas.element,
