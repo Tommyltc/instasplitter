@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    
+
     <title>Photo Spliter</title>
     <script src="utils.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -57,13 +57,13 @@
                             global.canvas.element,
                             global.canvas.context,
                             global.imageData,
-                            detectmob()?200:1000,
+                            1000,
                             true);
                 });
             });
             initCanvas("canvas");
             document.getElementById("generate").addEventListener("click",function(){
-                generateImages(global.imageData,detectmob()?500:1000);
+                generateImages(global.imageData,1000);
             });
         });
     </script>

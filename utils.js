@@ -155,7 +155,7 @@ function mousemove(e){
             global.canvas.element,
             global.canvas.context,
             global.imageData,
-            detectmob()?200:1000,
+            1000,
             true
         );
     }
