@@ -1,7 +1,6 @@
 /**
  * Created by lindaltc on 27/9/2017.
  */
-alert("1.0.6");
 var global = {};
 var lastDimen = null;
 var xOffset = 0,yOffset = 0;
@@ -158,7 +157,7 @@ function touchmove(e){
             global.canvas.element,
             global.canvas.context,
             global.imageData,
-            1000,
+            document.getElementById("canvas").clientWidth,
             true
         );
     }
@@ -189,7 +188,7 @@ function mousemove(e){
             global.canvas.element,
             global.canvas.context,
             global.imageData,
-            1000,
+            document.getElementById("canvas").clientWidth,
             true
         );
     }

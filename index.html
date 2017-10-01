@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Photo Spliter</title>
     <script src="utils.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -17,7 +18,7 @@
             display: none;
         }
         .mcontainer {
-            margin: 20px;
+            margin: 10px;
         }
         .mrow {
             display: block;
@@ -36,8 +37,11 @@
             display: block;
         }
         .canvas-view span {
-            font-size: 20px;
+            font-size: 10px;
             padding: 0 0 5px 0;
+        }
+        #canvas {
+            width: 100%;
         }
     </style>
     <script>
@@ -56,13 +60,13 @@
                             global.canvas.element,
                             global.canvas.context,
                             global.imageData,
-                            1000,
+                            document.getElementById("canvas").clientWidth,
                             true);
                 });
             });
             initCanvas("canvas");
             document.getElementById("generate").addEventListener("click",function(){
-                generateImages(global.imageData,1000);
+                generateImages(global.imageData,document.getElementById("canvas").clientWidth);
             });
         });
     </script>
@@ -70,7 +74,7 @@
 <body>
 <div class="mcontainer">
     <div class="mrow">
-        <label for="file-input" class="btn btn-default btn-lg">
+        <label for="file-input" class="btn btn-default btn-l">
                 <span class="glyphicon glyphicon-picture"></span> Select Image
         </label>
         <input type="file" id="file-input" accept="image/*"/>
@@ -82,14 +86,14 @@
     </div>
 
     <div class="mrow">
-        <div class="input-group input-group-lg">
+        <div class="input-group input-group-l">
             <span class="input-group-addon">File prefix:</span>
             <input type="text" id="file_prefix" placeholder="image" class="form-control"/>
             <span class="input-group-addon">_[index]_[13digits].png</span>
         </div>
     </div>
     <div class="mrow">
-        <div class="btn btn-default btn-lg" id="generate">
+        <div class="btn btn-default btn-l" id="generate">
             <span class="glyphicon glyphicon-ok"></span> Generate
         </div>
     </div>
