@@ -75,11 +75,19 @@ function drawCanvas(canvas,context,imageData,maxWidth,drawLine){
 
     if(drawLine){
         for (var i = 0; i <= (imageData.width - imageData.diff) / imageData.height; i++) {
-            context.beginPath();
-            context.strokeStyle = "white";
-            context.moveTo((imageData.height * i+xOffset) * scaleRatio, 0);
-            context.lineTo((imageData.height * i+xOffset) * scaleRatio, scaleHeight);
-            context.stroke();
+            if(i==0){
+                context.fillStyle = 'rgba(255, 255, 255, 0.6)';
+                context.fillRect(0,0,(imageData.height * i+xOffset) * scaleRatio,scaleHeight);
+            }else if(i == (imageData.width - imageData.diff) / imageData.height){
+                context.fillStyle = 'rgba(255, 255, 255, 0.6)';
+                context.fillRect((imageData.height * i+xOffset) * scaleRatio,0,(imageData.width-imageData.height * i+xOffset) * scaleRatio,scaleHeight);
+            }else{
+                context.beginPath();
+                context.strokeStyle = "white";
+                context.moveTo((imageData.height * i+xOffset) * scaleRatio, 0);
+                context.lineTo((imageData.height * i+xOffset) * scaleRatio, scaleHeight);
+                context.stroke();
+            }
         }
     }
 }
@@ -101,31 +109,29 @@ function generateImages(imageData,maxWidth){
         var data = ocontext.getImageData(imageData.height*i+xOffset,0,imageData.height,imageData.height);
         pcontext.putImageData(data,0,0);
 
-        var link = document.createElement("a");
-        if(document.getElementById("file_prefix").value!="")
-            link.download = document.getElementById("file_prefix").value+"_"+i+"_"+ new Date().getTime()+ ".png";
-        else
-            link.download = "image_"+i+"_"+ new Date().getTime()+ ".png";
-        link.href = pcanvas.toDataURL();
+        if(!detectmob()){
+            var link = document.createElement("a");
+            if(document.getElementById("file_prefix").value!="")
+                link.download = document.getElementById("file_prefix").value+"_"+i+"_"+ new Date().getTime()+ ".png";
+            else
+                link.download = "image_"+i+"_"+ new Date().getTime()+ ".png";
+            link.href = pcanvas.toDataURL();
+            link.click();
+            link.remove();
+        }else{
+            var link = document.createElement("a");
+            if(document.getElementById("file_prefix").value!="")
+                link.download = document.getElementById("file_prefix").value+"_"+i+"_"+ new Date().getTime()+ ".png";
+            else
+                link.download = "image_"+i+"_"+ new Date().getTime()+ ".png";
+            link.href = pcanvas.toDataURL();
 
-        var img = document.createElement("img");
-        img.width = imageData.height*scaleRatio;
-        img.src = pcanvas.toDataURL();
-        link.appendChild(img);
-        document.getElementById("links").appendChild(link);
-
-        // if(!detectmob()){
-        //     var link = document.createElement("a");
-        //     if(document.getElementById("file_prefix").value!="")
-        //         link.download = document.getElementById("file_prefix").value+"_"+i+"_"+ new Date().getTime()+ ".png";
-        //     else
-        //         link.download = "image_"+i+"_"+ new Date().getTime()+ ".png";
-        //     link.href = pcanvas.toDataURL();
-        //     link.click();
-        //     link.remove();
-        // }else{
-        //     //mobile stuff
-        // }
+            var img = document.createElement("img");
+            img.width = imageData.height*scaleRatio;
+            img.src = pcanvas.toDataURL();
+            link.appendChild(img);
+            document.getElementById("links").appendChild(link);
+        }
 
         // var linkText = document.createTextNode(link.download);
         // link.appendChild(linkText);
@@ -146,14 +152,15 @@ function mousemove(e){
             global.canvas.element,
             global.canvas.context,
             global.imageData,
-            1000,
+            detectmob()?500:1000,
             true
         );
     }
 }
 
 function mousedown(e){
-    lastDimen = {x:e.clientX,y:e.clientY};
+    if(global.imageData)
+        lastDimen = {x:e.clientX,y:e.clientY};
 }
 
 function mouseup(e){
