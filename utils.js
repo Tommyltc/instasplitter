@@ -58,9 +58,9 @@ function initCanvas(id){
                 }
             }
         });
-    canvas.addEventListener("mousemove",mousemove);
-    canvas.addEventListener("mousedown",mousedown);
-    canvas.addEventListener("mouseup",mouseup);
+    canvas.addEventListener("mousemove touchmove",mousemove);
+    canvas.addEventListener("mousedown touchstart",mousedown);
+    canvas.addEventListener("mouseup touchend",mouseup);
 }
 
 function drawCanvas(canvas,context,imageData,maxWidth,drawLine){
