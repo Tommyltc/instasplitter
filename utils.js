@@ -150,13 +150,15 @@ function touchmove(e){
 }
 
 function touchdown(e){
-    if(global.imageData)
-        alert("down");
+    if(global.imageData){
+        document.getElementById("links").innerHTML = "";
+    }
         // lastDimen = {x:e.clientX,y:e.clientY};
 }
 
 function touchup(e){
-    alert("up");
+    var linkText = document.createTextNode(JSON.stringify(e));
+    document.getElementById("links").appendChild(linkText);
 }
 
 function mousemove(e){
