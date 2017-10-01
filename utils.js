@@ -1,7 +1,7 @@
 /**
  * Created by lindaltc on 27/9/2017.
  */
-alert("1.0.1");
+alert("1.0.2");
 var global = {};
 var lastDimen = null;
 var xOffset = 0,yOffset = 0;
