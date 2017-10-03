@@ -95,7 +95,76 @@ function drawCanvas(canvas,context,imageData,maxWidth,drawLine){
     }
 }
 
-function generateImages(imageData,maxWidth){
+function resizeImage(imageData,targetWidth,targetHeight,criticalParam,callback){
+    var canvas = document.createElement("canvas");
+    var context = canvas.getContext('2d');
+    var ratio;
+    if(criticalParam){
+        switch (criticalParam){
+            case "width":
+                ratio = targetWidth/imageData.width;
+                targetHeight = imageData.height*ratio;
+                break;
+            case "height":
+                ratio = targetHeight/imageData.height;
+                targetWidth = imageData.width*ratio;
+                break;
+        }
+    }
+    canvas.width = targetWidth;
+    canvas.height = targetHeight;
+    context.drawImage(imageData.imageObj,0,0,imageData.width,imageData.height,0,0,targetWidth,targetHeight);
+    var resultStr = canvas.toDataURL();
+    canvas.remove();
+    var image = new Image();
+    image.onload = callback;
+    image.src = resultStr;
+    return image;
+}
+
+function cropImage(imageData){
+    var mainFunction = function(){
+        var cropedImages = [];
+        var canvas = document.createElement("canvas");
+        var context = canvas.getContext('2d');
+        canvas.width = imageData.height;
+        canvas.height = imageData.height;
+        for(var i=0;i<(imageData.width-imageData.diff)/imageData.height;i++) {
+            context.drawImage(imageData.imageObj,imageData.height*i+xOffset,0,imageData.height,imageData.height,0,0,imageData.height,imageData.height);
+            cropedImages.push(canvas.toDataURL());
+            context.clearRect(0,0,imageData.height,imageData.height);
+        }
+        canvas.remove();
+        return cropedImages;
+    }
+
+    if(imageData.height>4096){
+        var image = resizeImage(imageData,4096,4096,"height",mainFunction);
+    }else{
+        return mainFunction();
+    }
+}
+
+function generateImages(imageData){
+    var cropedImages = cropImage(imageData);
+    var scaleRatio = document.getElementById("canvas").clientWidth/imageData.width;
+    document.getElementById("links").innerHTML = "";
+    for(var i=0;i<cropedImages.length;i++){
+        var img = document.createElement("img");
+        img.width = imageData.height*scaleRatio;
+        img.src = cropedImages[i];
+        // link.appendChild(img);
+        document.getElementById("links").appendChild(img);
+    }
+    var div = document.createElement("div");
+    div.className = "hits-block";
+    var linkText = document.createTextNode("Long press to download images");
+    div.appendChild(linkText);
+    document.getElementById("links").appendChild(div);
+}
+
+// width * height > 16777216
+function generateImages1(imageData,maxWidth){
     var ig_max_width = 1080;
     var scaleRatio = maxWidth/imageData.width;
     var ocanvas = document.createElement("canvas");
