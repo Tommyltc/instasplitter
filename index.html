@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Photo Spliter</title>
     <script src="utils.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>-->
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <!-- Optional theme -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">-->
     <!-- Latest compiled and minified JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>-->
 
     <style>
         #file-input {
@@ -21,7 +21,7 @@
             margin: 10px;
         }
         .mrow {
-            display: block;
+            display: flex;
             width: 100%;
             margin: 10px 0 10px 0;
         }
@@ -69,6 +69,45 @@
             font-size: 10px;
             color: rgba(0, 0, 0, 0.6);
         }
+        .mcol {
+            display: inline-block;
+            float: left;
+        }
+        .mcol.p-10 {
+            width: 10%;
+        }
+        .mcol.p-90 {
+            width: 90%;
+        }
+        .minput-group {
+            background: rgba(128,128,128,0.28);
+            border-radius: 5px;
+            border: 1px solid transparent;
+            display: flex;;
+        }
+        .minput-group * {
+            float: left;
+            padding: 5px 10px 5px 10px;
+            display: inline-block;
+        }
+        .minput-group .minput-group-addon {
+            width: 30%;
+        }
+        .minput-group .mform-control {
+            width: 40%;
+        }
+
+        .mcol.p-10.c-title {
+            font-size: larger;
+            font-weight: bold;
+            padding-left: 5px;
+        }
+        /*.minput-group .minput-group-addon:last-child {*/
+            /*border: 1px solid transparent;*/
+            /*border-top-right-radius: 5px;*/
+            /*border-bottom-right-radius: 5px;*/
+            /*background: rgba(128,128,128,0.28);*/
+        /*}*/
     </style>
     <script>
         //instagram max 1080 min 566
@@ -100,27 +139,39 @@
 <body>
 <div class="mcontainer">
     <div class="mrow">
-        <label for="file-input" class="btn btn-default btn-l">
-                <span class="glyphicon glyphicon-picture"></span> Select Image
-        </label>
-        <input type="file" id="file-input" accept="image/*"/>
-    </div>
-
-    <div class="mrow canvas-view">
-        <span>Drag the view to the best position</span>
-        <canvas id="canvas"></canvas>
+        <div class="mcol p-10 c-title">1.</div>
+        <div class="mcol p-90">
+            <label for="file-input" class="btn btn-default btn-l">
+                    <span class="glyphicon glyphicon-picture"></span> Select Image
+            </label>
+            <input type="file" id="file-input" accept="image/*"/>
+        </div>
     </div>
 
     <div class="mrow">
-        <div class="input-group input-group-l">
-            <span class="input-group-addon">File prefix:</span>
-            <input type="text" id="file_prefix" placeholder="image" class="form-control"/>
-            <span class="input-group-addon">_[index]_[13digits].png</span>
+        <div class="mcol p-10 c-title">2.</div>
+        <div class="mcol p-90 canvas-view">
+            <span>Drag the view to the best position</span>
+            <canvas id="canvas"></canvas>
+        </div>
+    </div>
+
+    <div class="mrow">
+        <div class="mcol p-10 c-title">3.</div>
+        <div class="mcol p-90">
+            <div class="minput-group">
+                <span class="minput-group-addon">File prefix:</span>
+                <input type="text" id="file_prefix" placeholder="image" class="mform-control"/>
+                <span class="minput-group-addon">_[index].png</span>
+            </div>
         </div>
     </div>
     <div class="mrow">
-        <div class="btn btn-default btn-l" id="generate">
-            <span class="glyphicon glyphicon-ok"></span> Generate
+        <div class="mcol p-10 c-title">4.</div>
+        <div class="mcol p-90">
+            <div class="btn btn-default btn-l" id="generate">
+                <span class="glyphicon glyphicon-ok"></span> Generate (Please wait for respond)
+            </div>
         </div>
     </div>
     <div class="mrow">

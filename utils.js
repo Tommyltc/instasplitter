@@ -122,90 +122,47 @@ function resizeImage(imageData,targetWidth,targetHeight,criticalParam,callback){
     return image;
 }
 
-function cropImage(imageData){
-    var mainFunction = function(){
+function cropImage(imageData,callback){
+    // width * height > 16777216
+    // sqrt(16777216) = 4096
+    if(imageData.height>4096){
+        var image = resizeImage(imageData,4096,4096,"height",function(){
+            var obj = {width:image.width,height:image.height,diff:image.width%image.height,imageObj:image};
+            cropImage(obj,callback);
+        });
+    }else {
         var cropedImages = [];
         var canvas = document.createElement("canvas");
         var context = canvas.getContext('2d');
         canvas.width = imageData.height;
         canvas.height = imageData.height;
-        for(var i=0;i<(imageData.width-imageData.diff)/imageData.height;i++) {
-            context.drawImage(imageData.imageObj,imageData.height*i+xOffset,0,imageData.height,imageData.height,0,0,imageData.height,imageData.height);
+        for (var i = 0; i < (imageData.width - imageData.diff) / imageData.height; i++) {
+            context.drawImage(imageData.imageObj, imageData.height * i + xOffset, 0, imageData.height, imageData.height, 0, 0, imageData.height, imageData.height);
             cropedImages.push(canvas.toDataURL());
-            context.clearRect(0,0,imageData.height,imageData.height);
+            context.clearRect(0, 0, imageData.height, imageData.height);
         }
         canvas.remove();
-        return cropedImages;
-    }
-
-    if(imageData.height>4096){
-        var image = resizeImage(imageData,4096,4096,"height",mainFunction);
-    }else{
-        return mainFunction();
+        callback(cropedImages);
     }
 }
 
 function generateImages(imageData){
-    var cropedImages = cropImage(imageData);
-    var scaleRatio = document.getElementById("canvas").clientWidth/imageData.width;
-    document.getElementById("links").innerHTML = "";
-    for(var i=0;i<cropedImages.length;i++){
-        var img = document.createElement("img");
-        img.width = imageData.height*scaleRatio;
-        img.src = cropedImages[i];
-        // link.appendChild(img);
-        document.getElementById("links").appendChild(img);
-    }
-    var div = document.createElement("div");
-    div.className = "hits-block";
-    var linkText = document.createTextNode("Long press to download images");
-    div.appendChild(linkText);
-    document.getElementById("links").appendChild(div);
-}
-
-// width * height > 16777216
-function generateImages1(imageData,maxWidth){
-    var ig_max_width = 1080;
-    var scaleRatio = maxWidth/imageData.width;
-    var ocanvas = document.createElement("canvas");
-    ocanvas.width = imageData.width;
-    ocanvas.height = imageData.height;
-    var ocontext = ocanvas.getContext('2d');
-    ocontext.drawImage(imageData.imageObj,0,0,imageData.width,imageData.height);
-
-    var pcanvas = document.createElement("canvas");
-    pcanvas.width = imageData.height;
-    pcanvas.height = imageData.height;
-    var pcontext = pcanvas.getContext('2d');
-    document.getElementById("links").innerHTML = "";
-    for(var i=0;i<(imageData.width-imageData.diff)/imageData.height;i++){
-        var data = ocontext.getImageData(imageData.height*i+xOffset,0,imageData.height,imageData.height);
-        pcontext.putImageData(data,0,0);
-
-        // if(!detectmob()){
-        //     var link = document.createElement("a");
-        //     if(document.getElementById("file_prefix").value!="")
-        //         link.download = document.getElementById("file_prefix").value+"_"+i+"_"+ new Date().getTime()+ ".png";
-        //     else
-        //         link.download = "image_"+i+"_"+ new Date().getTime()+ ".png";
-        //     link.href = pcanvas.toDataURL();
-        //     link.click();
-        //     link.remove();
-        // }else{
+    cropImage(imageData,function(cropedImages){
+        var scaleRatio = document.getElementById("canvas").clientWidth/imageData.width;
+        document.getElementById("links").innerHTML = "";
+        for(var i=0;i<cropedImages.length;i++){
             var img = document.createElement("img");
             img.width = imageData.height*scaleRatio;
-            img.src = pcanvas.toDataURL();
+            img.src = cropedImages[i];
             // link.appendChild(img);
             document.getElementById("links").appendChild(img);
-        // }
-    }
-    ocanvas.remove();
-    pcanvas.remove();
-    var div = document.createElement("div");
-    div.className = "hits-block";
-    var linkText = document.createTextNode("Long press to download images");
-    div.appendChild(linkText);
-    document.getElementById("links").appendChild(div);
+        }
+        var div = document.createElement("div");
+        div.className = "hits-block";
+        var linkText = document.createTextNode("Long press to download images");
+        div.appendChild(linkText);
+        document.getElementById("links").appendChild(div);
+    });
 }
 
 function touchmove(e){
