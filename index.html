@@ -4,6 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Photo Spliter</title>
+    <!-- Global Site Tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-107868714-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date(),"1.1.0");
+
+        gtag('config', 'UA-107868714-1',"1.1.0");
+    </script>
+
     <script src="utils.js"></script>
     <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>-->
     <!-- Latest compiled and minified CSS -->
@@ -132,6 +142,7 @@
             initCanvas("canvas");
             document.getElementById("generate").addEventListener("click",function(){
                 generateImages(global.imageData,document.getElementById("canvas").clientWidth);
+                gtag('generate',new Date(),"1.1.0");
             });
         });
     </script>
@@ -180,6 +191,6 @@
         </div>
     </div>
 </div>
-<div id="footer">version 1.0.8, Produced by <a href="mailto:lidali36@gmail.com">Tommy</a></div>
+<div id="footer">version 1.1.0, Produced by <a href="mailto:lidali36@gmail.com">Tommy</a></div>
 </body>
 </html>
